@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,21 +13,23 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import javax.inject.Inject;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import dagger.ObjectGraph;
-
 import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler;
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
 import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
 
+import javax.inject.Inject;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import dagger.ObjectGraph;
+
 public class Home extends Activity implements View.OnClickListener {
 
     private static final String TAG = Home.class.getSimpleName();
+
+    private static final String FFMPEG_URL = "http://jahed.ca/ffmpeg";
 
     @Inject
     FFmpeg ffmpeg;
@@ -64,7 +65,7 @@ public class Home extends Activity implements View.OnClickListener {
 
     private void loadFFMpegBinary() {
         try {
-            ffmpeg.loadBinary(new LoadBinaryResponseHandler() {
+            ffmpeg.loadBinary(FFMPEG_URL, new LoadBinaryResponseHandler() {
                 @Override
                 public void onFailure() {
                     showUnsupportedExceptionDialog();

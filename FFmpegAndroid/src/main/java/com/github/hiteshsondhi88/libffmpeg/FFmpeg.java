@@ -3,11 +3,12 @@ package com.github.hiteshsondhi88.libffmpeg;
 import android.content.Context;
 import android.text.TextUtils;
 
-import java.lang.reflect.Array;
-import java.util.Map;
-
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
+
+import java.io.File;
+import java.lang.reflect.Array;
+import java.util.Map;
 
 @SuppressWarnings("unused")
 public class FFmpeg implements FFmpegInterface {
@@ -34,7 +35,7 @@ public class FFmpeg implements FFmpegInterface {
     }
 
     @Override
-    public void loadBinary(FFmpegLoadBinaryResponseHandler ffmpegLoadBinaryResponseHandler) throws FFmpegNotSupportedException {
+    public void loadBinary(String url, FFmpegLoadBinaryResponseHandler ffmpegLoadBinaryResponseHandler) throws FFmpegNotSupportedException {
         String cpuArchNameFromAssets = null;
         switch (CpuArchHelper.getCpuArch()) {
             case x86:
@@ -45,16 +46,27 @@ public class FFmpeg implements FFmpegInterface {
                 Log.i("Loading FFmpeg for armv7 CPU");
                 cpuArchNameFromAssets = "armeabi-v7a";
                 break;
+            case ARMv7Neon:
+                Log.i("Loading FFmpeg for armv7-neon CPU");
+                cpuArchNameFromAssets = "armeabi-v7a-neon";
+                break;
             case NONE:
                 throw new FFmpegNotSupportedException("Device not supported");
         }
 
         if (!TextUtils.isEmpty(cpuArchNameFromAssets)) {
-            ffmpegLoadLibraryAsyncTask = new FFmpegLoadLibraryAsyncTask(context, cpuArchNameFromAssets, ffmpegLoadBinaryResponseHandler);
+            ffmpegLoadLibraryAsyncTask = new FFmpegLoadLibraryAsyncTask(context, url, cpuArchNameFromAssets, ffmpegLoadBinaryResponseHandler);
             ffmpegLoadLibraryAsyncTask.execute();
         } else {
             throw new FFmpegNotSupportedException("Device not supported");
         }
+    }
+
+    @Override
+    public void unloadBinary() {
+        File ffmpegFile = new File(FileUtils.getFFmpeg(context));
+        if(ffmpegFile.exists())
+            ffmpegFile.delete();
     }
 
     @Override

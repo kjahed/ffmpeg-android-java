@@ -1,19 +1,20 @@
 package com.github.hiteshsondhi88.libffmpeg;
 
-import java.util.Map;
-
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
+
+import java.util.Map;
 
 @SuppressWarnings("unused")
 interface FFmpegInterface {
 
     /**
      * Load binary to the device according to archituecture. This also updates FFmpeg binary if the binary on device have old version.
+     * @param url the url to download the binary from
      * @param ffmpegLoadBinaryResponseHandler {@link FFmpegLoadBinaryResponseHandler}
      * @throws FFmpegNotSupportedException
      */
-    public void loadBinary(FFmpegLoadBinaryResponseHandler ffmpegLoadBinaryResponseHandler) throws FFmpegNotSupportedException;
+    public void loadBinary(String url, FFmpegLoadBinaryResponseHandler ffmpegLoadBinaryResponseHandler) throws FFmpegNotSupportedException;
 
     /**
      * Executes a command
@@ -63,4 +64,8 @@ interface FFmpegInterface {
      */
     public void setTimeout(long timeout);
 
+    /**
+     * Delete the FFmpeg binary from the file system
+     */
+    public void unloadBinary();
 }

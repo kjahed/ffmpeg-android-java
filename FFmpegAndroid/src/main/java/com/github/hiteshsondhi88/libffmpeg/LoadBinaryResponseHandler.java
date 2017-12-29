@@ -21,4 +21,9 @@ public class LoadBinaryResponseHandler implements FFmpegLoadBinaryResponseHandle
     public void onFinish() {
 
     }
+
+    @Override
+    public void onProgress(int progress) {
+
+    }
 }

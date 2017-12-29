@@ -12,4 +12,9 @@ public interface FFmpegLoadBinaryResponseHandler extends ResponseHandler {
      */
     public void onSuccess();
 
+    /**
+     * on Progress
+     */
+    public void onProgress(int progress);
+
 }
